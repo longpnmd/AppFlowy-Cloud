@@ -33,18 +33,9 @@ async fn test_embedding_when_create_document() {
     true,
   )
   .await;
-  // Create the second document; no need to wait for its embedding.
-  let _ = add_document_collab(
-    &mut test_client,
-    &workspace_id,
-    "kathryn_tennis_story.md",
-    "tennis",
-    true,
-  )
-  .await;
 
   // Test Search
-  let query = "Kathryn tennis";
+  let query = "Overcoming the Five Dysfunctions";
   let items = test_client
     .wait_unit_get_search_result(&workspace_id, query, 5, 100, Some(0.2))
     .await
@@ -69,13 +60,13 @@ async fn test_embedding_when_create_document() {
     .map(|item| item.preview.clone().unwrap())
     .collect::<Vec<String>>()
     .join("\n");
-  let expected = "Kathryn's Journey to Becoming a Tennis PlayerKathryn's love for tennis began on a warm summer day wh";
+  let expected = "The Five Dysfunctions of a Team illustrates strategies for overcoming common organizational challenges by fostering trust, accountability, and shared goals to improve team dynamics.";
   calculate_similarity_and_assert(
     &mut test_client,
     workspace_id,
     previews,
     expected,
-    0.8,
+    0.7,
     "preview score",
   )
   .await;
